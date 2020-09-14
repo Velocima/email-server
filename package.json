@@ -1,0 +1,29 @@
+{
+  "name": "email-server",
+  "version": "1.0.0",
+  "description": "Server for handling contact form submissions from static websites",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server",
+    "server": "nodemon server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Velocima/email-server.git"
+  },
+  "author": "Max Hartley",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Velocima/email-server/issues"
+  },
+  "homepage": "https://github.com/Velocima/email-server#readme",
+  "dependencies": {
+    "config": "^3.3.1",
+    "express": "^4.17.1",
+    "nodemailer": "^6.4.11"
+  },
+  "devDependencies": {
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.4"
+  }
+}
