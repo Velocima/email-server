@@ -1,14 +1,19 @@
 const express = require('express');
 const morgan = require('morgan');
+const config = require('config');
 const rateLimit = require("express-rate-limit");
+const ipfilter = require('express-ipfilter').IpFilter
+
 const app = express();
- 
+
+// Init middleware
+const ips = config.get("ipWhitelist");
+app.use(ipfilter(ips, { mode: 'allow' }))
+
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
 });
- 
-// Init middleware
 app.use(limiter);
 app.use(morgan('short'));
 app.use(express.json());
