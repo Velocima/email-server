@@ -33,7 +33,7 @@ sendMailRouter.post('/sendmail/:sendTo',
                 pass: config.get(`${sendToAddress}.password`)
             }
         });
-
+        
         transporter.sendMail(mail, (err) => {
             if (err) {
                 throw err;
