@@ -3,6 +3,8 @@ const morgan = require('morgan');
 const app = express();
 
 app.use(morgan('short'));
+app.use(express.json());
+
 app.use('/api/', require('./routes/sendMail'))
 
 

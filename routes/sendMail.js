@@ -3,11 +3,9 @@ const nodemailer = require('nodemailer');
 const config = require('config');
 const validator = require('express-validator');
 
-
-
-// let transporter = nodemailer.createTransport(transport, defaults);
 // request object fields: 
 // name, subject, email, message.
+
 
 
 
@@ -20,18 +18,43 @@ sendMailRouter.get('/sendmail', (req, res) => {
 sendMailRouter.post('/sendmail/:sendTo',
 []
 , (req, res) => {
-    const sendToAddress = req.params.sendTo;
+    const sendToAddress = req.params.sendTo.toString();
 
     const { name, subject, email, message } = req.body.email;
 
     const mail = {
         from: email,
-        to: config.get(sendToAddress),
+        to: config.get(`${sendToAddress}.email`),
         subject: subject,
-        text: `Client name: ${name}. Message: ${message}`,
+        html: `<p>Client name: ${name}. <br></br> Message: ${message}<p>`,
     };
 
-    res.send("mail sent");
+    let transporter = nodemailer.createTransport({
+        host: config.get(`${sendToAddress}.host`),
+        port: config.get(`${sendToAddress}.port`),
+        secure: false,   
+        auth: {
+          user: config.get(`${sendToAddress}.email`),
+          pass: config.get(`${sendToAddress}.password`)
+        }
+    });
+    transporter.verify(function(error, success) {
+        if (error) {
+            console.log("Transporter is incorrectly configured.")
+            console.log(error);
+        } else {
+            console.log("Server is ready to take our messages");
+        }
+    });
+
+    transporter.sendMail(mail, (err) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send();
+            return;
+        }
+        res.send('mail sent');
+    })
 });
 
 module.exports = sendMailRouter;
