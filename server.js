@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const config = require('config');
+const helmet = require('helmet');
 const rateLimit = require("express-rate-limit");
 const ipfilter = require('express-ipfilter').IpFilter
 
@@ -16,6 +17,7 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 app.use(morgan('short'));
+app.use(helmet({hsts: false}));
 app.use(express.json());
 
 app.use('/api/', require('./routes/sendMail'))

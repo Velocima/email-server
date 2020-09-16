@@ -36,7 +36,7 @@ sendMailRouter.post('/sendmail/:sendTo',
         res.status(400).send('Invalid endpoint');
         return;
     }
-
+    
     const { name, subject, email, message } = req.body.email;
 
     const mail = {
