@@ -1,7 +1,7 @@
 const express = require('express');
 const nodemailer = require('nodemailer');
 const config = require('config');
-const validator = require('express-validator');
+const { body, validationResult } = require('express-validator');
 
 const sendMailRouter = express.Router();
 
@@ -10,9 +10,32 @@ sendMailRouter.get('/sendmail', (req, res) => {
 })
 
 sendMailRouter.post('/sendmail/:sendTo',
-[]
+[
+    body('email.name')
+        .notEmpty()
+        .escape(),
+    body('email.subject')
+        .notEmpty()
+        .escape(),
+    body('email.message')
+        .notEmpty()
+        .escape(),
+    body('email.email')
+        .isEmail(),
+]
 , (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        console.log(errors);
+        return res.status(400).json({ errors: errors.array() });
+    }
+
     const sendToAddress = req.params.sendTo.toString();
+
+    if (!config.has(sendToAddress)) {
+        res.status(400).send('Invalid endpoint');
+        return;
+    }
 
     const { name, subject, email, message } = req.body.email;
 
