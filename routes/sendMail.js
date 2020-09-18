@@ -24,19 +24,20 @@ sendMailRouter.post('/sendmail/:sendTo',
         .isEmail(),
 ]
 , (req, res) => {
+    // sata validation
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        console.log(errors);
         return res.status(400).json({ errors: errors.array() });
     }
-
+    
     const sendToAddress = req.params.sendTo.toString();
 
-    if (!config.has(sendToAddress)) {
+    if (!config.has(sendToAddress) || sendToAddress.length > 10) {
         res.status(400).send('Invalid endpoint');
         return;
     }
     
+    // send email
     const { name, subject, email, message } = req.body.email;
 
     const mail = {

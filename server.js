@@ -17,13 +17,13 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 app.use(morgan('short'));
-app.use(helmet({hsts: false}));
+app.use(helmet());
 app.use(express.json());
 
 app.use('/api/', require('./routes/sendMail'))
 
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT);
 
