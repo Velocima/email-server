@@ -6,6 +6,7 @@ const rateLimit = require("express-rate-limit");
 const ipfilter = require('express-ipfilter').IpFilter
 
 const app = express();
+app.use(express.static('public/index.html'));
 
 // Init middleware
 const ips = config.get("ipWhitelist");
